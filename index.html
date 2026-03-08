@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ширин ✨</title>
+  <link rel="icon" type="image/x-icon" href="images/Flower.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg1: #fff7fb;
+      --bg2: #ffe3ef;
+      --bg3: #ffd3e4;
+      --text: #4c2a37;
+      --accent: #ff5b96;
+      --accent-dark: #d93f78;
+      --white: #ffffff;
+      --glass: rgba(255, 255, 255, 0.48);
+      --shadow: 0 20px 45px rgba(109, 36, 74, 0.14);
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      color: var(--text);
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.95), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.6), transparent 25%),
+        linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      position: relative;
+    }
+
+    .petals-layer,
+    .sparkles-layer,
+    .butterflies-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .petals-layer { z-index: 1; }
+    .sparkles-layer { z-index: 2; }
+    .butterflies-layer { z-index: 50; }
+
+    .petal,
+    .sparkle,
+    .butterfly {
+      position: absolute;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .petal {
+      top: -60px;
+      font-size: 22px;
+      opacity: 0.8;
+      animation: fall linear forwards;
+    }
+
+    .sparkle {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 10px white, 0 0 18px rgba(255,255,255,0.9);
+      animation: sparkleFade 1.8s linear forwards;
+    }
+
+    .butterfly {
+      font-size: 30px;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      animation: butterflyFly 3.6s ease-out forwards;
+      filter: drop-shadow(0 10px 14px rgba(255, 91, 150, 0.25));
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0.12;
+      }
+    }
+
+    @keyframes sparkleFade {
+      0% {
+        transform: scale(0.1);
+        opacity: 0;
+      }
+      30% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.4);
+        opacity: 0;
+      }
+    }
+
+    @keyframes butterflyFly {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+      }
+      12% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform:
+          translate(
+            calc(-50% + var(--move-x)),
+            calc(-50% + var(--move-y))
+          )
+          scale(1.2)
+          rotate(var(--rotate));
+      }
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+      padding: 28px 0 56px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero {
+      min-height: 560px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      background: var(--glass);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.46);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-text {
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .tag {
+      display: inline-block;
+      width: fit-content;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 91, 150, 0.12);
+      color: var(--accent-dark);
+      font-weight: bold;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(40px, 7vw, 76px);
+      line-height: 1.04;
+      color: var(--accent-dark);
+      margin-bottom: 16px;
+    }
+
+    .hero-text p {
+      font-size: 20px;
+      line-height: 1.8;
+      margin-bottom: 16px;
+      max-width: 620px;
+    }
+
+    .typing {
+      min-height: 34px;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.25s ease;
+      box-shadow: 0 12px 24px rgba(217, 63, 120, 0.16);
+    }
+
+    button:hover {
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    .btn-main {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    }
+
+    .btn-soft {
+      background: rgba(255,255,255,0.92);
+      color: var(--accent-dark);
+    }
+
+    .hero-photo {
+      position: relative;
+      background:
+        linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
+        url("images/shirin1.jpg") center/cover no-repeat;
+      min-height: 360px;
+    }
+
+    .hero-badge {
+      position: absolute;
+      left: 22px;
+      bottom: 22px;
+      background: rgba(255,255,255,0.75);
+      color: var(--accent-dark);
+      backdrop-filter: blur(8px);
+      padding: 13px 18px;
+      border-radius: 18px;
+      font-weight: bold;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .section {
+      margin-top: 28px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.46);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+    }
+
+    .section h2 {
+      text-align: center;
+      font-size: 34px;
+      color: var(--accent-dark);
+      margin-bottom: 18px;
+    }
+
+    .main-message {
+      max-width: 880px;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 21px;
+      line-height: 1.9;
+    }
+
+    .phrase-box {
+      margin-top: 18px;
+      text-align: center;
+      min-height: 34px;
+      color: var(--accent);
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .card {
+      overflow: hidden;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.94);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+      transition: 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 430px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card p {
+      padding: 14px;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 26px;
+      font-size: 18px;
+      color: var(--accent-dark);
+      font-weight: bold;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(66, 19, 43, 0.58);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-content {
+      width: min(720px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,244,249,0.98));
+      border-radius: 24px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 24px 50px rgba(0,0,0,0.22);
+      animation: modalShow 0.35s ease;
+    }
+
+    .modal-content h3 {
+      font-size: 34px;
+      color: var(--accent-dark);
+      margin-bottom: 16px;
+    }
+
+    .modal-content p {
+      font-size: 21px;
+      line-height: 1.85;
+    }
+
+    @keyframes modalShow {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 940px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .card img {
+        height: 520px;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .hero-text {
+        padding: 34px 22px;
+      }
+
+      .section {
+        padding: 22px;
+      }
+
+      .hero-text p,
+      .main-message,
+      .modal-content p {
+        font-size: 18px;
+      }
+
+      .phrase-box {
+        font-size: 20px;
+      }
+
+      .card img {
+        height: 380px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="petals-layer" id="petalsLayer"></div>
+  <div class="sparkles-layer" id="sparklesLayer"></div>
+  <div class="butterflies-layer" id="butterfliesLayer"></div>
+
+  <div class="container">
+    <section class="hero">
+      <div class="hero-text">
+        <div class="tag">для Ширин</div>
+        <h1>Ширин, это тебе ✨</h1>
+        <p>
+          Иногда хочется просто собрать всё хорошее в одном месте:
+          красивый вечер, мягкий свет, немного тепла и несколько слов,
+          которые не звучат громко, но почему-то запоминаются.
+        </p>
+
+        <div class="typing" id="typingText"></div>
+
+        <div class="buttons">
+          <button class="btn-main" onclick="openLetter()">Открыть слова</button>
+          <button class="btn-soft" onclick="changePhrase()">Ещё фраза</button>
+          <button class="btn-soft" onclick="releaseButterflies()">Бабочки</button>
+        </div>
+      </div>
+
+      <div class="hero-photo">
+        <div class="hero-badge">одно из самых красивых фото</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Немного про тебя</h2>
+      <div class="main-message">
+        В тебе есть что-то очень лёгкое, но при этом настоящее.
+        Без лишнего шума, без попытки произвести впечатление —
+        просто ощущение, от которого день становится лучше.
+        Хочется, чтобы у тебя всегда было много света,
+        хороших людей рядом и моментов, к которым хочется возвращаться мыслями.
+      </div>
+
+      <div class="phrase-box" id="phraseBox">
+        Ты из тех людей, рядом с которыми всё становится теплее.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Твои фото</h2>
+      <div class="gallery">
+        <div class="card">
+          <img src="images/shirin1.jpg" alt="Фото Ширин 1">
+          <p>Фото с вечерним настроением и очень красивым светом.</p>
+        </div>
+
+        <div class="card">
+          <img src="images/shirin2.jpg" alt="Фото Ширин 2">
+          <p>Кадр, в котором есть спокойствие, лёгкость и свой вайб.</p>
+        </div>
+
+        <div class="card">
+          <img src="images/shirin3.jpg" alt="Фото Ширин 3">
+          <p>Ещё одно фото, которое хочется просто оставить здесь.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">для Ширин 💫</div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3>Ширин</h3>
+      <p id="letterText"></p>
+      <div style="margin-top:20px;">
+        <button class="btn-main" onclick="closeLetter()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const typingLines = [
+      "некоторые люди запоминаются сразу",
+      "в тебе очень красивое спокойствие",
+      "пусть у тебя будет много счастливых дней",
+      "ты очень красиво вписываешься в любой кадр"
+    ];
+
+    const phrases = [
+      "Ты из тех людей, рядом с которыми всё становится теплее.",
+      "В тебе есть лёгкость, которая остаётся в памяти.",
+      "Иногда достаточно просто вспомнить тебя, и день уже лучше.",
+      "Ты не про громкость, ты про ощущение, которое остаётся.",
+      "У тебя очень редкое сочетание — мягкость и характер одновременно.",
+      "Есть люди, которые просто делают всё вокруг красивее."
+    ];
+
+    const letters = [
+      "Просто хотелось сделать для тебя что-то красивое. Без лишнего пафоса, без громких слов — просто чтобы у тебя осталось хорошее настроение от этого.",
+      "Ты правда очень приятный человек. В тебе есть спокойствие, которое редко встречается, и, наверное, именно поэтому это так цепляет.",
+      "Пусть у тебя будет больше дней, в которых всё складывается легко: настроение, люди, моменты и даже случайные мелочи."
+    ];
+
+    let typingIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function randomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function typeEffect() {
+      const el = document.getElementById("typingText");
+      const text = typingLines[typingIndex];
+
+      if (!isDeleting) {
+        el.textContent = text.slice(0, charIndex++);
+        if (charIndex > text.length) {
+          isDeleting = true;
+          setTimeout(typeEffect, 1200);
+          return;
+        }
+      } else {
+        el.textContent = text.slice(0, charIndex--);
+        if (charIndex < 0) {
+          isDeleting = false;
+          typingIndex = (typingIndex + 1) % typingLines.length;
+        }
+      }
+
+      setTimeout(typeEffect, isDeleting ? 35 : 68);
+    }
+
+    function changePhrase() {
+      const box = document.getElementById("phraseBox");
+      box.textContent = randomItem(phrases);
+      box.animate(
+        [
+          { transform: "scale(0.96)", opacity: 0.4 },
+          { transform: "scale(1)", opacity: 1 }
+        ],
+        { duration: 320, easing: "ease" }
+      );
+      sparkleBurst(12);
+    }
+
+    function openLetter() {
+      document.getElementById("letterText").textContent = randomItem(letters);
+      document.getElementById("modal").style.display = "flex";
+      sparkleBurst(20);
+    }
+
+    function closeLetter() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function createPetal() {
+      const wrap = document.getElementById("petalsLayer");
+      const petal = document.createElement("div");
+      const symbols = ["🌸", "🌷", "🌹", "💮", "🌺"];
+      petal.className = "petal";
+      petal.textContent = randomItem(symbols);
+      petal.style.left = Math.random() * 100 + "vw";
+      petal.style.animationDuration = (8 + Math.random() * 8) + "s";
+      petal.style.fontSize = (18 + Math.random() * 16) + "px";
+      wrap.appendChild(petal);
+      setTimeout(() => petal.remove(), 17000);
+    }
+
+    function createSparkle(x, y) {
+      const layer = document.getElementById("sparklesLayer");
+      const s = document.createElement("div");
+      s.className = "sparkle";
+      s.style.left = x + "px";
+      s.style.top = y + "px";
+      layer.appendChild(s);
+      setTimeout(() => s.remove(), 1800);
+    }
+
+    function sparkleBurst(count) {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const x = centerX + (Math.random() * 240 - 120);
+          const y = centerY + (Math.random() * 180 - 90);
+          createSparkle(x, y);
+        }, i * 35);
+      }
+    }
+
+    function releaseButterflies() {
+      const layer = document.getElementById("butterfliesLayer");
+      const items = ["🦋", "🦋", "🦋", "🦋", "🦋"];
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2 + 120;
+
+      for (let i = 0; i < 22; i++) {
+        setTimeout(() => {
+          const b = document.createElement("div");
+          b.className = "butterfly";
+          b.textContent = randomItem(items);
+
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 180 + Math.random() * 280;
+          const moveX = Math.cos(angle) * distance;
+          const moveY = -220 - Math.random() * 260;
+
+          b.style.left = centerX + "px";
+          b.style.top = centerY + "px";
+          b.style.setProperty("--move-x", `${moveX}px`);
+          b.style.setProperty("--move-y", `${moveY}px`);
+          b.style.setProperty("--rotate", `${-40 + Math.random() * 80}deg`);
+          b.style.fontSize = (24 + Math.random() * 18) + "px";
+
+          layer.appendChild(b);
+          setTimeout(() => b.remove(), 3700);
+        }, i * 80);
+      }
+
+      sparkleBurst(28);
+    }
+
+    function autoDecor() {
+      setInterval(createPetal, 550);
+    }
+
+    window.addEventListener("click", (e) => {
+      if (e.target.id === "modal") closeLetter();
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeLetter();
+      if (e.key.toLowerCase() === "b") releaseButterflies();
+    });
+
+    typeEffect();
+    autoDecor();
+  </script>
+</body>
+</html>
